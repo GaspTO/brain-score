@@ -251,10 +251,10 @@ def _engineering_benchmark_pool():
             lambda benchmark_ctr=benchmark_ctr: benchmark_ctr())
         
     # Hermann2020
-    from . import Hermann2020
-    pool['brendel.Hermann2020cueconflict-shape_bias'] = LazyLoad(Hermann2020.Hermann2020cueconflictShapeBias)
-    pool['brendel.Hermann2020cueconflict-shape_match'] = LazyLoad(Hermann2020.Hermann2020cueconflictShapeMatch)
-    pool['brendel.Hermann2020cueconflict-texture_match'] = LazyLoad(Hermann2020.Hermann2020cueconflictTextureMatch)
+    from . import hermann2020
+    pool['brendel.Hermann2020cueconflict-shape_bias'] = LazyLoad(hermann2020.Hermann2020cueconflictShapeBias)
+    pool['brendel.Hermann2020cueconflict-shape_match'] = LazyLoad(hermann2020.Hermann2020cueconflictShapeMatch)
+    pool['brendel.Hermann2020cueconflict-texture_match'] = LazyLoad(hermann2020.Hermann2020cueconflictTextureMatch)
 
 
     return pool
