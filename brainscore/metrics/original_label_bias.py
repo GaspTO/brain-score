@@ -1,4 +1,6 @@
 from brainscore.metrics import Metric, Score
+from brainscore.metrics.accuracy import Accuracy
+import numpy as np
 
 class OriginalLabelBias(Metric):
     """
@@ -8,9 +10,19 @@ class OriginalLabelBias(Metric):
     It corresponds to the shape bias in https://arxiv.org/abs/1911.09071
     """
     def __call__(self,source,target):
-        conflict_labels = target.sel(category="conflict_image_category")
-        original_labels = target.sel(category="original_image_category")
-        total_conflict = (source == conflict_labels).sum()
-        total_original = (source == original_labels).sum()
-        original_bias = total_conflict / (total_conflict + total_original)
-        return Score(original_bias)
+        assert (source["image_id"] == target["image_id"]).all()
+        #remove entrees without cue-conflict
+        
+        correct_conflict = target["conflict_image_category"] == source.values
+        correct_original = target["original_image_category"] == source.values
+        correct_conflict_or_original = np.logical_or(correct_conflict,correct_original)
+        values = correct_original[correct_conflict_or_original]
+        center = values.mean()
+        error = values.std()
+
+        score = Score([center, error], coords={'aggregation': ['center', 'error']}, dims=('aggregation',))
+        score.attrs[Score.RAW_VALUES_KEY] = values
+        return score
+
+
+
