@@ -121,6 +121,9 @@ class TestPoolList:
             'brendel.Geirhos2021stylized-top1',
             'brendel.Geirhos2021sketch-top1',
             'brendel.Geirhos2021uniformnoise-top1',
+            'brendel.Hermann2020cueconflict-shape_bias',
+            'brendel.Hermann2020cueconflict-shape_match',
+            'brendel.Hermann2020cueconflict-texture_match'
         }
 
 
@@ -415,6 +418,15 @@ class TestPrecomputed:
         # score
         score = benchmark(precomputed_features).raw
         assert score.sel(aggregation='center') == expected
+
+
+    @pytest.mark.parametrize('benchmark, expected', [
+        ('brendel.Hermann2020cueconflict-shape_bias', approx(0.21392405, abs=0.001)),
+        ('brendel.Hermann2020cueconflict-shape_match', approx(0.15083333, abs=0.001)),
+        ('brendel.Hermann2020cueconflict-texture_match', approx(0.47916667, abs=0.001)),
+    ])
+    def test_hermann2020(self, benchmark, expected):
+        self.run_test(benchmark=benchmark, file='resnet-50-pytorch-3deg-Geirhos2021_cue-conflict.nc', expected=expected)
 
 
 class TestVisualDegrees:
